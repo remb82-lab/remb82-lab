@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="title desc">
+<title id="title">remb82-lab — AI Product Builder</title>
+<desc id="desc">Profile banner for remb82-lab</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#0b1020"/>
+    <stop offset="55%" stop-color="#111827"/>
+    <stop offset="100%" stop-color="#1f2937"/>
+  </linearGradient>
+  <radialGradient id="glow" cx="78%" cy="25%" r="60%">
+    <stop offset="0%" stop-color="#22d3ee" stop-opacity=".34"/>
+    <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#22d3ee"/>
+    <stop offset="100%" stop-color="#8b5cf6"/>
+  </linearGradient>
+</defs>
+<rect width="1280" height="420" rx="28" fill="url(#bg)"/>
+<rect width="1280" height="420" rx="28" fill="url(#glow)"/>
+<g opacity=".12" stroke="#94a3b8">
+  <path d="M0 90H1280M0 180H1280M0 270H1280M0 360H1280"/>
+  <path d="M160 0V420M320 0V420M480 0V420M640 0V420M800 0V420M960 0V420M1120 0V420"/>
+</g>
+<g transform="translate(82 76)">
+  <rect width="86" height="86" rx="22" fill="url(#accent)"/>
+  <path d="M24 61V25h21c16 0 26 6 26 18 0 8-5 13-12 15l15 20H57L45 61H39v17H24zm15-12h7c7 0 11-2 11-7s-4-7-11-7h-7v14z" fill="#fff"/>
+</g>
+<text x="82" y="218" fill="#f8fafc" font-size="58" font-family="Arial, Helvetica, sans-serif" font-weight="700">remb82-lab</text>
+<text x="82" y="270" fill="#cbd5e1" font-size="28" font-family="Arial, Helvetica, sans-serif">AI Product Builder · Vibe Coding · Web &amp; PWA · Automation</text>
+<rect x="82" y="312" width="510" height="3" rx="2" fill="url(#accent)"/>
+<text x="82" y="355" fill="#94a3b8" font-size="20" font-family="Arial, Helvetica, sans-serif" letter-spacing="2">IDEA → ARCHITECTURE → AI BUILD → QA → RELEASE</text>
+<g transform="translate(944 136)">
+  <circle cx="78" cy="78" r="78" fill="none" stroke="url(#accent)" stroke-width="3" opacity=".9"/>
+  <circle cx="78" cy="78" r="54" fill="none" stroke="#94a3b8" stroke-width="1" opacity=".4"/>
+  <circle cx="78" cy="78" r="8" fill="#22d3ee"/>
+  <circle cx="78" cy="24" r="6" fill="#8b5cf6"/>
+  <circle cx="125" cy="106" r="6" fill="#22d3ee"/>
+  <circle cx="32" cy="111" r="6" fill="#8b5cf6"/>
+  <path d="M78 32V70M86 82l33 20M70 84l-31 22" stroke="#cbd5e1" stroke-width="2" opacity=".75"/>
+</g>
+</svg>
