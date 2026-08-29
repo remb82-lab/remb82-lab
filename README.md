@@ -35,7 +35,9 @@
 
 ## ❤️ Support open demos & experiments
 
-Если мои открытые демо, AI-эксперименты и инструменты оказались полезны, вы сможете поддержать их развитие здесь.
+Если мои открытые демо, AI-эксперименты и инструменты оказались полезны, вы можете поддержать их развитие через Ko-fi.
+
+[![Support on Ko-fi](https://img.shields.io/badge/Support_on_Ko--fi-remb82ab-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/remb82ab)
 
 > Support helps me publish more open demos, experiments and practical AI products.
 
