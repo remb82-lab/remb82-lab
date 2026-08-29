@@ -33,6 +33,12 @@
 ### 🍳 [Home Kitchen Client](https://github.com/remb82-lab/Home-Kitchen-Client)
 Клиентское приложение Home Kitchen: каталог продукции, мобильный UX, PWA и работа с заказами.
 
+## ❤️ Support open demos & experiments
+
+Если мои открытые демо, AI-эксперименты и инструменты оказались полезны, вы сможете поддержать их развитие здесь.
+
+> Support helps me publish more open demos, experiments and practical AI products.
+
 ## ⚙️ Как я работаю
 
 ```text
