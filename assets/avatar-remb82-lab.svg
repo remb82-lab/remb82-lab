@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs>
+  <linearGradient id="ring" x1="140" y1="120" x2="900" y2="900" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#00E5FF"/>
+    <stop offset=".24" stop-color="#3B82F6"/>
+    <stop offset=".47" stop-color="#7B2CFF"/>
+    <stop offset=".68" stop-color="#FF00A8"/>
+    <stop offset=".84" stop-color="#FF7A00"/>
+    <stop offset="1" stop-color="#FFD600"/>
+  </linearGradient>
+  <linearGradient id="rgrad" x1="375" y1="300" x2="710" y2="720" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#A78BFA"/>
+    <stop offset=".35" stop-color="#7B2CFF"/>
+    <stop offset=".58" stop-color="#FF00A8"/>
+    <stop offset=".82" stop-color="#FF7A00"/>
+    <stop offset="1" stop-color="#FFD600"/>
+  </linearGradient>
+</defs>
+<rect width="1024" height="1024" fill="#05070B"/>
+<circle cx="512" cy="512" r="420" fill="#05070B" stroke="url(#ring)" stroke-width="28"/>
+<path d="M342 312H560C682 312 754 374 754 478C754 559 708 611 632 632L770 758H619L504 650H475V758H342V312Z" fill="url(#rgrad)"/>
+<path d="M475 424H552C595 424 621 443 621 478C621 514 595 532 552 532H475V424Z" fill="#05070B"/>
+<path d="M342 360L416 432V758H342V360Z" fill="#FFFFFF"/>
+<path d="M342 312H492L564 384H414L342 312Z" fill="#EDE9FE"/>
+</svg>
