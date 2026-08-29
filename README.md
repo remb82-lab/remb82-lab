@@ -1,8 +1,8 @@
 <div align="center">
 
-# Дим — AI Product Builder
+<img src="./assets/profile-hero.svg" alt="remb82-lab — AI Product Builder" width="100%" />
 
-### Vibe Coding · Web & PWA · AI Automation · Product Development
+<br />
 
 Строю реальные цифровые продукты с помощью AI — от идеи, UX/UI и архитектуры до рабочего приложения, автоматизации и релиза.
 
