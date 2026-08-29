@@ -33,9 +33,6 @@
 ### 🍳 [Home Kitchen Client](https://github.com/remb82-lab/Home-Kitchen-Client)
 Клиентское приложение Home Kitchen: каталог продукции, мобильный UX, PWA и работа с заказами.
 
-### 🤖 [Bot Report Telegram](https://github.com/remb82-lab/Botreporttelegram)
-Telegram-инструменты и автоматизация отчётности.
-
 ## ⚙️ Как я работаю
 
 ```text
