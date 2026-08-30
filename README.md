@@ -28,10 +28,22 @@
 ![Android](https://img.shields.io/badge/Android-111111?style=flat-square&logo=android)
 ![AI](https://img.shields.io/badge/AI_Agents-111111?style=flat-square)
 
-## 📌 Публичные проекты
+## ⭐ Featured Projects
 
-### 🍳 [Home Kitchen Client](https://github.com/remb82-lab/Home-Kitchen-Client)
-Клиентское приложение Home Kitchen: каталог продукции, мобильный UX, PWA и работа с заказами.
+### 🎮 TikGame Engine Demo
+
+Публичный интерактивный showcase движка: симулированные LIVE-события проходят через архитектуру **EVENT → ENGINE → GAME** и управляют Battle Arena в реальном времени.
+
+[![Live Demo](https://img.shields.io/badge/▶_Live_Demo-Open-22c55e?style=for-the-badge)](https://remb82-lab.github.io/TikGame-Engine-Demo/)
+[![Source](https://img.shields.io/badge/Source-TikGame--Engine--Demo-181717?style=for-the-badge&logo=github)](https://github.com/remb82-lab/TikGame-Engine-Demo)
+
+`React` · `TypeScript` · `Vite` · `Vitest` · `GitHub Actions`
+
+### 🍳 Home Kitchen Client
+
+Клиентское PWA-приложение Home Kitchen: каталог продукции, мобильный UX и работа с заказами.
+
+[![Source](https://img.shields.io/badge/Source-Home--Kitchen--Client-181717?style=for-the-badge&logo=github)](https://github.com/remb82-lab/Home-Kitchen-Client)
 
 ## ❤️ Support open demos & experiments
 
