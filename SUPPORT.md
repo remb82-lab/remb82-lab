@@ -4,11 +4,11 @@ If my open demos, AI experiments and practical tools are useful to you, you can 
 
 ## Binance Pay
 
-### 5 USDT
+[![5 USDT](https://img.shields.io/badge/Binance_Pay-5_USDT-F0B90B?style=for-the-badge&logo=binance&logoColor=000000)](https://app.binance.com/uni-qr/request-to-pay?billOrderId=451479147482447872&billType=request_a_payment)
 
-[![Support with Binance Pay](https://img.shields.io/badge/Binance_Pay-5_USDT-F0B90B?style=for-the-badge&logo=binance&logoColor=000000)](https://app.binance.com/uni-qr/request-to-pay?billOrderId=451479147482447872&billType=request_a_payment)
+[![10 USDT](https://img.shields.io/badge/Binance_Pay-10_USDT-F0B90B?style=for-the-badge&logo=binance&logoColor=000000)](https://app.binance.com/uni-qr/request-to-pay?billOrderId=451479437615112192&billType=request_a_payment)
 
-This link opens a Binance Pay payment request for **5 USDT**.
+Choose the support amount that works for you.
 
 ## Ko-fi
 
