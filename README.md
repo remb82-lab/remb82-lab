@@ -41,9 +41,12 @@
 
 ### 🍳 Home Kitchen Client
 
-Клиентское PWA-приложение Home Kitchen: каталог продукции, мобильный UX и работа с заказами.
+Клиентское PWA-приложение Home Kitchen: каталог продукции, мобильный UX, корзина, оформление заказа и история заказов.
 
+[![Live Demo](https://img.shields.io/badge/▶_Live_Demo-Open-4c6a3f?style=for-the-badge)](https://remb82-lab.github.io/Home-Kitchen-Client/)
 [![Source](https://img.shields.io/badge/Source-Home--Kitchen--Client-181717?style=for-the-badge&logo=github)](https://github.com/remb82-lab/Home-Kitchen-Client)
+
+`JavaScript` · `PWA` · `Supabase` · `GitHub Pages`
 
 ## ❤️ Support open demos & experiments
 
