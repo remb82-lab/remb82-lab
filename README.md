@@ -40,6 +40,7 @@
 [![5 USDT](https://img.shields.io/badge/Binance_Pay-5_USDT-F0B90B?style=for-the-badge&logo=binance&logoColor=000000)](https://app.binance.com/uni-qr/request-to-pay?billOrderId=451479147482447872&billType=request_a_payment)
 [![10 USDT](https://img.shields.io/badge/Binance_Pay-10_USDT-F0B90B?style=for-the-badge&logo=binance&logoColor=000000)](https://app.binance.com/uni-qr/request-to-pay?billOrderId=451479437615112192&billType=request_a_payment)
 [![25 USDT](https://img.shields.io/badge/Binance_Pay-25_USDT-F0B90B?style=for-the-badge&logo=binance&logoColor=000000)](https://app.binance.com/uni-qr/request-to-pay?billOrderId=451479482828849152&billType=request_a_payment)
+[![Custom amount](https://img.shields.io/badge/Binance_Pay-Custom_amount-F0B90B?style=for-the-badge&logo=binance&logoColor=000000)](https://app.binance.com/uni-qr/Eq1ji9Ys)
 [![All support options](https://img.shields.io/badge/All_support_options-SUPPORT.md-111111?style=for-the-badge&logo=github)](./SUPPORT.md)
 
 > Support helps me publish more open demos, experiments and practical AI products.
