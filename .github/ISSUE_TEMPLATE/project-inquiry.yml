@@ -1,0 +1,91 @@
+name: Project inquiry
+description: Tell me about a product, MVP, automation or interactive demo you want to build.
+title: "[Project] "
+labels:
+  - project-inquiry
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reaching out.
+
+        This is a **public GitHub issue**. Do not include passwords, API keys, private credentials, personal documents or other sensitive information.
+
+  - type: dropdown
+    id: project_type
+    attributes:
+      label: Project type
+      options:
+        - AI-powered MVP / product
+        - Web / PWA application
+        - Mobile-first product
+        - AI automation / agent workflow
+        - Interactive game / streaming demo
+        - Prototype / proof of concept
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: What do you want to build?
+      description: Describe the product, target user and desired outcome.
+      placeholder: A short summary of the idea and what success looks like.
+    validations:
+      required: true
+
+  - type: textarea
+    id: must_have
+    attributes:
+      label: Must-have features
+      description: List the most important features for the first version.
+      placeholder: |
+        - Feature 1
+        - Feature 2
+        - Feature 3
+    validations:
+      required: true
+
+  - type: dropdown
+    id: budget
+    attributes:
+      label: Budget range
+      description: Optional rough range for the first version.
+      options:
+        - Not decided yet
+        - Under $500
+        - $500–$1,500
+        - $1,500–$5,000
+        - $5,000+
+        - Prefer to discuss privately
+    validations:
+      required: true
+
+  - type: dropdown
+    id: timeline
+    attributes:
+      label: Timeline
+      options:
+        - As soon as possible
+        - 1–2 weeks
+        - 2–4 weeks
+        - 1–3 months
+        - Flexible
+    validations:
+      required: true
+
+  - type: textarea
+    id: links
+    attributes:
+      label: References or links
+      description: Public links only — examples, mockups, competitors, repositories or demos.
+      placeholder: https://...
+
+  - type: checkboxes
+    id: public_ack
+    attributes:
+      label: Public issue acknowledgement
+      options:
+        - label: I understand this issue is public and I have not included sensitive or confidential information.
+          required: true
