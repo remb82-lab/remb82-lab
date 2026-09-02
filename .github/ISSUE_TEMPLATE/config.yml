@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Open-source questions
+    url: https://github.com/remb82-lab
+    about: Use the relevant public repository for technical questions about an open demo.
