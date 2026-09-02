@@ -60,6 +60,10 @@
 
 **Фокус:** понятная бизнес-задача, быстрый прототип, аккуратная архитектура, QA и рабочий релиз.
 
+[![Start a project inquiry](https://img.shields.io/badge/Start_a_project_inquiry-Open-7c3aed?style=for-the-badge&logo=github)](https://github.com/remb82-lab/remb82-lab/issues/new?template=project-inquiry.yml)
+
+> Форма заявки публичная: не отправляйте через неё пароли, ключи API, документы или другие конфиденциальные данные.
+
 ## ❤️ Support open demos & experiments
 
 Если мои открытые демо, AI-эксперименты и инструменты оказались полезны, вы можете поддержать их развитие.
