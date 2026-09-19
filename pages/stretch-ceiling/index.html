@@ -1,3 +1,374 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101923"><title>Контур — расчёт потолков</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css"></head>
-<body><header><b>КОНТУР <small>ПОТОЛКИ</small></b><span id="connection"></span></header><main><aside><h2>Объекты</h2><button id="new">+ Новый объект</button><div id="projects"></div><hr><button id="backup" class="secondary">Скачать резервную копию</button><label class="file">Восстановить из JSON<input type="file" id="restore" accept="application/json"></label><p class="hint">Данные хранятся в этом браузере. Резервная копия нужна для переноса на другой телефон.</p></aside><article><div class="title"><div><small>РАБОЧАЯ СМЕТА · MVP 1.0</small><h1>Замер и расчёт</h1></div><span id="saved"></span></div><div id="editor"></div><section><h2>Документы</h2><div class="actions"><button data-doc="client">Смета клиенту</button><button data-doc="mount" class="secondary">Монтажный лист</button><button data-doc="buy" class="secondary">Закупка</button></div><p class="hint">Документ открывается для печати. Выберите «Сохранить как PDF» в диалоге браузера.</p></section></article></main><script type="module" src="app.js"></script></body></html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="description" content="Офлайн-калькулятор натяжных потолков с локальной базой прайсов.">
+  <title>Потолок — калькулятор сметы</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#calculator">К калькулятору</a>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#top" aria-label="На начало страницы">
+        <span class="brand-mark" aria-hidden="true">⌁</span>
+        <span>ПОТОЛОК <small>калькулятор сметы</small></span>
+      </a>
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="#calculator">Расчёт</a>
+        <button class="nav-button" id="openCatalogTop" type="button">Прайс</button>
+        <button class="nav-button" id="openSavedTop" type="button">Сохранённые</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">ОФЛАЙН • ЛОКАЛЬНЫЕ ПРАЙСЫ • СМЕТА С ПРИБЫЛЬЮ</p>
+          <h1>Рассчитайте натяжной потолок прямо на замере</h1>
+          <p class="hero-lead">Геометрия помещения, материалы, работы, себестоимость, цена клиенту и прибыль — в одном экране. Интернет для расчёта не нужен.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#calculator">Начать расчёт</a>
+            <button class="button ghost" id="openCatalogHero" type="button">Открыть локальный прайс</button>
+          </div>
+          <div class="hero-proof" aria-label="Данные локальной базы">
+            <div><strong id="heroProducts">—</strong><span>позиций в БД</span></div>
+            <div><strong id="heroPrices">—</strong><span>ценовых записей</span></div>
+            <div><strong>Offline</strong><span>работает локально</span></div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Пример результата сметы">
+          <div class="preview-card">
+            <div class="preview-head">
+              <span>Смета • Гостиная</span>
+              <span class="status-dot">локально</span>
+            </div>
+            <div class="preview-metric">
+              <span>Площадь</span><strong>18,6 м²</strong>
+            </div>
+            <div class="preview-metric">
+              <span>Периметр</span><strong>17,4 м</strong>
+            </div>
+            <div class="preview-divider"></div>
+            <div class="preview-metric emphasis">
+              <span>Цена клиенту</span><strong>рассчитывается</strong>
+            </div>
+            <p class="preview-note">Цены профилей берутся из локальной базы. Полотно и работа — из ваших значений.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Источник прайса">
+      <div class="container trust-inner">
+        <span class="badge">База подключена</span>
+        <span>LumFer.BY: профильные системы, комплектующие, треки и светильники</span>
+        <span class="muted" id="priceDates">Прайсы: —</span>
+      </div>
+    </section>
+
+    <section class="calculator-section" id="calculator">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">РАСЧЁТ</p>
+          <h2>Смета помещения</h2>
+          <p>Введите геометрию, выберите профиль и способ формирования цены. Все поля можно менять прямо во время замера.</p>
+        </div>
+
+        <div class="calc-layout">
+          <form class="calc-panel" id="calcForm" novalidate>
+            <div class="form-section">
+              <div class="section-row">
+                <div>
+                  <span class="step-number">01</span>
+                  <h3>Помещение и геометрия</h3>
+                </div>
+                <div class="segmented" role="tablist" aria-label="Способ замера">
+                  <button type="button" class="seg active" data-mode="rect" role="tab" aria-selected="true">Прямоугольник</button>
+                  <button type="button" class="seg" data-mode="quad" role="tab" aria-selected="false">4 стороны</button>
+                  <button type="button" class="seg" data-mode="sketch" role="tab" aria-selected="false">Эскиз</button>
+                </div>
+              </div>
+
+              <div class="field-grid two">
+                <label class="field">
+                  <span>Название помещения</span>
+                  <input id="roomName" type="text" value="Гостиная" autocomplete="off">
+                </label>
+                <label class="field">
+                  <span>Объект / клиент</span>
+                  <input id="projectName" type="text" placeholder="Например: Иванов, ул. Первомайская" autocomplete="off">
+                </label>
+              </div>
+
+              <div id="rectFields" class="geometry-pane">
+                <div class="field-grid two">
+                  <label class="field">
+                    <span>Длина, м</span>
+                    <input id="length" type="number" min="0" step="0.01" inputmode="decimal" placeholder="5.20">
+                  </label>
+                  <label class="field">
+                    <span>Ширина, м</span>
+                    <input id="width" type="number" min="0" step="0.01" inputmode="decimal" placeholder="3.60">
+                  </label>
+                </div>
+              </div>
+
+              <div id="quadFields" class="geometry-pane hidden">
+                <p class="hint">Для четырёхугольника укажите стороны по порядку A–B–C–D и диагональ между вершинами после A и B / перед C и D. Площадь считается как сумма двух треугольников.</p>
+                <div class="field-grid five">
+                  <label class="field"><span>A, м</span><input id="sideA" type="number" min="0" step="0.01" inputmode="decimal"></label>
+                  <label class="field"><span>B, м</span><input id="sideB" type="number" min="0" step="0.01" inputmode="decimal"></label>
+                  <label class="field"><span>C, м</span><input id="sideC" type="number" min="0" step="0.01" inputmode="decimal"></label>
+                  <label class="field"><span>D, м</span><input id="sideD" type="number" min="0" step="0.01" inputmode="decimal"></label>
+                  <label class="field accent-field"><span>Диагональ, м</span><input id="diagonal" type="number" min="0" step="0.01" inputmode="decimal"></label>
+                </div>
+                <div class="inline-alert hidden" id="quadError" role="status"></div>
+              </div>
+
+              <div id="sketchFields" class="geometry-pane hidden">
+                <p class="hint">Коснитесь сетки, чтобы поставить углы помещения. Шаг привязки — 0,25 м. После последней точки нажмите «Замкнуть».</p>
+                <div class="sketch-shell">
+                  <svg id="sketchSvg" viewBox="0 0 600 420" role="img" aria-label="Поле для схемы помещения"></svg>
+                  <div class="sketch-toolbar">
+                    <button class="button small ghost" type="button" id="sketchUndo">Назад</button>
+                    <button class="button small secondary" type="button" id="sketchClose">Замкнуть</button>
+                    <button class="button small ghost" type="button" id="sketchClear">Очистить</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="metric-row">
+                <div><span>Площадь</span><strong id="areaMetric">0,00 м²</strong></div>
+                <div><span>Периметр</span><strong id="perimeterMetric">0,00 м</strong></div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="section-row">
+                <div>
+                  <span class="step-number">02</span>
+                  <h3>Материалы</h3>
+                </div>
+                <button class="text-button" id="openCatalogInline" type="button">Добавить из прайса</button>
+              </div>
+
+              <div class="field-grid two">
+                <label class="field">
+                  <span>Поставщик</span>
+                  <select id="supplierSelect"></select>
+                </label>
+                <label class="field">
+                  <span>Курс USD → BYN</span>
+                  <input id="usdRate" type="number" min="0" step="0.0001" inputmode="decimal" placeholder="Введите курс">
+                  <small>Курс не зашит в базу — задаётся для каждой сметы.</small>
+                </label>
+              </div>
+
+              <label class="field">
+                <span>Профиль по периметру</span>
+                <select id="profileSelect"></select>
+                <small id="profileHint">Цена поставщика будет показана после выбора.</small>
+              </label>
+
+              <div class="field-grid three">
+                <label class="field">
+                  <span>Полотно, BYN/м²</span>
+                  <input id="membranePrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ваш прайс">
+                </label>
+                <label class="field">
+                  <span>Монтаж, BYN/м²</span>
+                  <input id="laborPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ваша ставка">
+                </label>
+                <label class="field">
+                  <span>Запас материала, %</span>
+                  <input id="wastePct" type="number" min="0" step="0.1" inputmode="decimal" value="0">
+                </label>
+              </div>
+
+              <details class="details">
+                <summary>Дополнительные работы</summary>
+                <div class="details-body">
+                  <div class="field-grid three">
+                    <label class="field">
+                      <span>Светоточки, шт.</span>
+                      <input id="lightQty" type="number" min="0" step="1" inputmode="numeric" value="0">
+                    </label>
+                    <label class="field">
+                      <span>Цена за светоточку, BYN</span>
+                      <input id="lightPrice" type="number" min="0" step="0.01" inputmode="decimal" value="0">
+                    </label>
+                    <label class="field">
+                      <span>Обход труб, шт.</span>
+                      <input id="pipeQty" type="number" min="0" step="1" inputmode="numeric" value="0">
+                    </label>
+                    <label class="field">
+                      <span>Цена обхода, BYN</span>
+                      <input id="pipePrice" type="number" min="0" step="0.01" inputmode="decimal" value="0">
+                    </label>
+                    <label class="field">
+                      <span>Карниз / ниша, м</span>
+                      <input id="corniceQty" type="number" min="0" step="0.01" inputmode="decimal" value="0">
+                    </label>
+                    <label class="field">
+                      <span>Цена за метр, BYN</span>
+                      <input id="cornicePrice" type="number" min="0" step="0.01" inputmode="decimal" value="0">
+                    </label>
+                  </div>
+                  <label class="field">
+                    <span>Прочие расходы / работы, BYN</span>
+                    <input id="miscCost" type="number" min="0" step="0.01" inputmode="decimal" value="0">
+                  </label>
+                </div>
+              </details>
+
+              <div id="extraItemsWrap" class="extra-items hidden">
+                <div class="subhead">
+                  <h4>Позиции из локального прайса</h4>
+                  <span id="extraItemsCount">0</span>
+                </div>
+                <div id="extraItems"></div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="section-row">
+                <div>
+                  <span class="step-number">03</span>
+                  <h3>Цена клиенту</h3>
+                </div>
+              </div>
+              <div class="price-methods">
+                <label class="method-card active">
+                  <input type="radio" name="priceMethod" value="percent" checked>
+                  <span><strong>Наценка, %</strong><small>Цена = себестоимость + процент</small></span>
+                </label>
+                <label class="method-card">
+                  <input type="radio" name="priceMethod" value="fixed">
+                  <span><strong>Фиксированная прибыль</strong><small>Добавить сумму к себестоимости</small></span>
+                </label>
+                <label class="method-card">
+                  <input type="radio" name="priceMethod" value="manual">
+                  <span><strong>Цена вручную</strong><small>Указать итог клиенту</small></span>
+                </label>
+              </div>
+
+              <label class="field" id="priceMethodValueWrap">
+                <span id="priceMethodLabel">Наценка, %</span>
+                <input id="priceMethodValue" type="number" min="0" step="0.01" inputmode="decimal" value="0">
+              </label>
+            </div>
+          </form>
+
+          <aside class="result-panel" aria-live="polite">
+            <div class="result-card">
+              <div class="result-head">
+                <div>
+                  <p class="eyebrow">ИТОГ СМЕТЫ</p>
+                  <h3 id="resultRoomName">Гостиная</h3>
+                </div>
+                <span class="badge subtle">черновик</span>
+              </div>
+
+              <div class="result-primary">
+                <span>Цена клиенту</span>
+                <strong id="clientPrice">0,00 BYN</strong>
+              </div>
+
+              <div class="result-kpis">
+                <div><span>Себестоимость</span><strong id="costPrice">0,00 BYN</strong></div>
+                <div><span>Прибыль</span><strong id="profitPrice">0,00 BYN</strong></div>
+                <div><span>Маржа</span><strong id="marginPct">0,0%</strong></div>
+              </div>
+
+              <div class="result-lines" id="resultLines"></div>
+
+              <div class="result-warning hidden" id="rateWarning">
+                Для профиля в USD введите курс USD → BYN.
+              </div>
+
+              <div class="result-actions">
+                <button class="button primary" type="button" id="saveEstimate">Сохранить смету</button>
+                <button class="button secondary" type="button" id="printEstimate">Печать</button>
+                <button class="button ghost" type="button" id="exportEstimate">Скачать JSON</button>
+              </div>
+              <p class="result-source" id="resultSource">Источник цен: локальная БД.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <div class="section-heading compact">
+          <p class="eyebrow">КАК РАБОТАЕТ</p>
+          <h2>Один поток от замера до цены</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card"><span>1</span><h3>Замер</h3><p>Прямоугольник, четыре стороны с диагональю или схема пальцем на сетке.</p></article>
+          <article class="feature-card"><span>2</span><h3>Материалы</h3><p>Профили и комплектующие выбираются из локальной базы поставщика.</p></article>
+          <article class="feature-card"><span>3</span><h3>Себестоимость</h3><p>Полотно, монтаж, дополнительные работы и позиции прайса складываются автоматически.</p></article>
+          <article class="feature-card"><span>4</span><h3>Цена и прибыль</h3><p>Процент, фиксированная прибыль или ручная цена клиента — отдельно в каждой смете.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="catalogDialog" class="dialog">
+    <div class="dialog-shell">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">ЛОКАЛЬНАЯ БАЗА</p>
+          <h2>Прайс материалов</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="catalogDialog" aria-label="Закрыть">×</button>
+      </div>
+      <div class="catalog-controls">
+        <label class="search-field">
+          <span class="sr-only">Поиск по прайсу</span>
+          <input id="catalogSearch" type="search" placeholder="Профиль, гарпун, светильник…">
+        </label>
+        <select id="catalogCategory" aria-label="Категория прайса"></select>
+      </div>
+      <div class="catalog-meta" id="catalogMeta"></div>
+      <div class="catalog-list" id="catalogList"></div>
+    </div>
+  </dialog>
+
+  <dialog id="savedDialog" class="dialog">
+    <div class="dialog-shell narrow">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">ЛОКАЛЬНО</p>
+          <h2>Сохранённые сметы</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="savedDialog" aria-label="Закрыть">×</button>
+      </div>
+      <div id="savedList" class="saved-list"></div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data/price-base.js"></script>
+  <script src="data/price-products-01.js"></script>
+  <script src="data/price-products-02.js"></script>
+  <script src="data/price-products-03.js"></script>
+  <script src="data/price-products-04.js"></script>
+  <script src="data/price-products-05.js"></script>
+  <script src="data/price-products-06.js"></script>
+  <script src="data/price-products-07.js"></script>
+  <script src="data/price-products-08.js"></script>
+  <script src="data/price-products-09.js"></script>
+  <script src="data/price-products-10.js"></script>
+  <script src="data/price-products-11.js"></script>
+  <script src="data/price-products-12.js"></script>
+  <script src="data/price-products-13.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
