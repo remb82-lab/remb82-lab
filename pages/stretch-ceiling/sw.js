@@ -1,5 +1,14 @@
-const CACHE='ceiling-v1.0.0';
-const ASSETS=['./','./index.html','./style.css','./app.js','./engine.mjs','./manifest.json','./icon.svg'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('ceiling-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==location.origin)return;e.respondWith(caches.match(e.request).then(c=>c||fetch(e.request)));});
+// Cleanup worker for the retired MVP cache. The current full calculator does not register a service worker.
+self.addEventListener('install', event => {
+  self.skipWaiting();
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key)))));
+});
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    await caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key))));
+    await self.registration.unregister();
+    const clientsList = await self.clients.matchAll({type: 'window', includeUncontrolled: true});
+    for (const client of clientsList) client.navigate(client.url);
+  })());
+});
+self.addEventListener('fetch', () => {});
