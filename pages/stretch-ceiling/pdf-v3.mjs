@@ -40,10 +40,13 @@ function geometryGraphic(page,roomCalc){
   if(page.y+330>PAGE_H-100)return false;
   const ctx=page.ctx, pts=roomCalc.geom.points||[];const x0=M,y0=page.y,w=460,h=280;
   ctx.fillStyle='#f6f8f9';ctx.fillRect(x0,y0,w,h);ctx.strokeStyle='#ccd5dc';ctx.strokeRect(x0,y0,w,h);
-  if(pts.length>=3){let minX=Math.min(...pts.map(p=>p.x)),maxX=Math.max(...pts.map(p=>p.x)),minY=Math.min(...pts.map(p=>p.y)),maxY=Math.max(...pts.map(p=>p.y));const sx=(w-70)/Math.max(.1,maxX-minX),sy=(h-70)/Math.max(.1,maxY-minY),s=Math.min(sx,sy);const map=p=>({x:x0+35+(p.x-minX)*s,y:y0+35+(p.y-minY)*s});ctx.beginPath();pts.forEach((p,i)=>{const q=map(p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y)});ctx.closePath();ctx.fillStyle='rgba(35,160,145,.10)';ctx.fill();ctx.strokeStyle='#16877c';ctx.lineWidth=4;ctx.stroke();pts.forEach((p,i)=>{const q=map(p);ctx.fillStyle='#16877c';ctx.beginPath();ctx.arc(q.x,q.y,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1b2630';ctx.font='18px Arial';ctx.fillText(String.fromCharCode(65+i),q.x+9,q.y-8)});
-  }
+  if(pts.length>=3){let minX=Math.min(...pts.map(p=>p.x)),maxX=Math.max(...pts.map(p=>p.x)),minY=Math.min(...pts.map(p=>p.y)),maxY=Math.max(...pts.map(p=>p.y));const sx=(w-70)/Math.max(.1,maxX-minX),sy=(h-70)/Math.max(.1,maxY-minY),s=Math.min(sx,sy);const map=p=>({x:x0+35+(p.x-minX)*s,y:y0+35+(p.y-minY)*s});ctx.beginPath();pts.forEach((p,i)=>{const q=map(p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y)});ctx.closePath();ctx.fillStyle='rgba(35,160,145,.10)';ctx.fill();ctx.strokeStyle='#16877c';ctx.lineWidth=4;ctx.stroke();pts.forEach((p,i)=>{const q=map(p);ctx.fillStyle='#16877c';ctx.beginPath();ctx.arc(q.x,q.y,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1b2630';ctx.font='18px Arial';ctx.fillText(String.fromCharCode(65+i),q.x+9,q.y-8)});}
   ctx.fillStyle='#1b2630';ctx.font='22px Arial';ctx.fillText(`Площадь: ${num(roomCalc.geom.area)} м²`,x0+w+38,y0+46);ctx.fillText(`Периметр: ${num(roomCalc.geom.perimeter)} м`,x0+w+38,y0+84);ctx.fillText(`Углов: ${pts.length}`,x0+w+38,y0+122);ctx.fillText(`Ниш: ${roomCalc.room.geometry?.niches?.length||0}`,x0+w+38,y0+160);ctx.fillText(`Элементов: ${roomCalc.room.features?.length||0}`,x0+w+38,y0+198);
   page.y+=310;return true;
+}
+
+function procurementText(line){
+  return `${num(line.qty)} ${line.unit||'шт.'}`;
 }
 
 function buildSections(project,calc,type){
@@ -51,27 +54,55 @@ function buildSections(project,calc,type){
   const ensure=(fn,...args)=>{if(!fn(page,...args)){page=newPage(type==='client'?'Смета клиенту':type==='installer'?'Монтажный лист':'Внутренний расчёт',project.title||'Объект');pages.push(page);fn(page,...args)}};
   ensure(heading,'Объект');ensure(lineBlock,'Клиент',project.client?.name||'—');ensure(lineBlock,'Телефон',project.client?.phone||'—');ensure(lineBlock,'Адрес',project.client?.address||'—');ensure(lineBlock,'Статус',project.status||'—');
   if(project.notes)ensure(paragraph,project.notes);
+
   for(const rc of calc.rooms){
     ensure(heading,rc.room.name||'Помещение');ensure(geometryGraphic,rc);
+
     if(type==='installer'){
       const pts=rc.geom.points||[];
       if(pts.length)ensure(paragraph,'Вершины: '+pts.map((p,i)=>`${String.fromCharCode(65+i)}(${num(p.x)}; ${num(p.y)})`).join(', '));
       const diags=rc.room.geometry?.diagonalMeasurements||[];if(diags.length)ensure(paragraph,'Контрольные диагонали: '+diags.map(d=>`${String.fromCharCode(65+d.a)}-${String.fromCharCode(65+d.b)} = ${num(d.length)} м`).join('; '));
       const niches=rc.room.geometry?.niches||[];if(niches.length)ensure(paragraph,'Ниши: '+niches.map((n,i)=>`№${i+1} ${num(n.width)}×${num(n.depth)} м`).join('; '));
-      const fs=rc.features||[];if(fs.length)ensure(paragraph,'Элементы: '+fs.map(f=>`${f.label||f.type}${f.length?` ${num(f.length)} м`:''}${f.qty?` ×${f.qty}`:''}`).join('; '));
+      const fs=rc.features||[];if(fs.length)ensure(paragraph,'Элементы: '+fs.map(f=>`${f.label||f.type}${f.diameterMm?` Ø${num(f.diameterMm,0)} мм`:''}${f.length?` ${num(f.length)} м`:''}${f.qty?` ×${f.qty}`:''}${f.wireM?` · провод ${num(f.wireM)} м`:''}`).join('; '));
       if(rc.room.notes)ensure(paragraph,'Заметки: '+rc.room.notes);
+
+      ensure(heading,'Монтаж и закупка');
+      if(rc.profile){
+        const ps=rc.profileStock||{};
+        ensure(lineBlock,'Профиль',`${num(ps.requiredM)} м по замеру → ${num(ps.purchaseM)} м закупка · ${ps.pieces||0} хлыст. по ${num(ps.stickLengthM)} м`);
+        if(ps.offcutM)ensure(lineBlock,'Остаток профиля',`${num(ps.offcutM)} м`);
+      }
+      ensure(lineBlock,'Крепёж по стене',`${rc.fasteners?.qty||0} шт. · шаг ${num((rc.fasteners?.stepM||0)*1000,0)} мм`);
+      if(rc.electrical?.points){
+        ensure(lineBlock,'Световые точки',`${rc.electrical.points} шт.`);
+        ensure(lineBlock,'WAGO / клеммы',`${rc.electrical.wago?.total||0} шт. (${rc.electrical.wago?.pointWago||0} на точки + ${rc.electrical.wago?.inputWago||0} на вход линий)`);
+        ensure(lineBlock,'Подвесы',`${num(rc.electrical.suspensions,0)} шт.`);
+      }
+      if(rc.autoKit?.lines?.length){
+        ensure(heading,'Автокомплект LumFer');
+        for(const line of rc.autoKit.lines)ensure(lineBlock,line.name,procurementText(line));
+      }
+      for(const warning of rc.autoKit?.warnings||[])ensure(paragraph,'Внимание: '+warning);
     } else if(type==='client'){
       const roomShare=calc.cost?rc.cost/calc.cost*calc.clientTotal:0;ensure(lineBlock,'Площадь',`${num(rc.geom.area)} м²`);ensure(lineBlock,'Стоимость помещения',money(roomShare),true);
       if(rc.features.length)ensure(paragraph,'Включено: '+rc.features.map(f=>f.label||f.type).join(', '));
     } else {
-      ensure(lineBlock,'Полотно',money(rc.membraneCost));ensure(lineBlock,'Профиль',money(rc.profileCost));ensure(lineBlock,'Монтаж',money(rc.laborCost));ensure(lineBlock,'Материалы из прайса',money(rc.materialsCost));ensure(lineBlock,'Доп. элементы',money(rc.featuresCost));ensure(lineBlock,'Себестоимость помещения',money(rc.cost),true);
+      ensure(lineBlock,'Полотно',money(rc.membraneCost));ensure(lineBlock,'Профиль',money(rc.profileCost));ensure(lineBlock,'Монтаж',money(rc.laborCost));ensure(lineBlock,'Материалы из прайса',money(rc.materialsCost));ensure(lineBlock,'Автокомплект LumFer',money(rc.autoMaterialsCost));ensure(lineBlock,'Доп. элементы / работа',money(rc.featuresCost));ensure(lineBlock,'Себестоимость помещения',money(rc.cost),true);
+      if(rc.profile){const ps=rc.profileStock||{};ensure(lineBlock,'Профиль: закупка',`${num(ps.purchaseM)} м · ${ps.pieces||0} хлыст. · остаток ${num(ps.offcutM)} м`)}
       for(const m of rc.materials)ensure(lineBlock,m.product?.name||'Материал',`${num(m.qty)} × ${money(m.unitCost)} = ${money(m.total)}`);
+      for(const line of rc.autoKit?.lines||[])ensure(lineBlock,`AUTO · ${line.name}`,`${num(line.qty)} ${line.unit||''} × ${money(line.unitCost)} = ${money(line.total)}`);
+      for(const warning of rc.autoKit?.warnings||[])ensure(paragraph,'Предупреждение расчёта: '+warning);
     }
   }
+
   ensure(heading,'Итого');
-  if(type==='client'){ensure(lineBlock,'Общая площадь',`${num(calc.totalArea)} м²`);ensure(lineBlock,'Итого к оплате',money(calc.clientTotal),true)}
-  else if(type==='installer'){ensure(lineBlock,'Помещений',String(calc.rooms.length));ensure(lineBlock,'Общая площадь',`${num(calc.totalArea)} м²`);ensure(lineBlock,'Общий периметр',`${num(calc.totalPerimeter)} м`);ensure(paragraph,'Документ сформирован из актуального сохранённого замера. Перед раскроем сверить контрольные размеры на объекте.')}
-  else {ensure(lineBlock,'Себестоимость',money(calc.cost));ensure(lineBlock,'Цена клиенту',money(calc.clientTotal));ensure(lineBlock,'Прибыль',money(calc.profit),true);ensure(lineBlock,'Маржа',`${num(calc.margin,1)}%`);ensure(lineBlock,'Курс USD/BYN',num(project.pricing?.usdBynRate,4));ensure(lineBlock,'Обновлено',date(project.updatedAt))}
+  if(type==='client'){
+    ensure(lineBlock,'Общая площадь',`${num(calc.totalArea)} м²`);ensure(lineBlock,'Итого к оплате',money(calc.clientTotal),true);
+  } else if(type==='installer'){
+    ensure(lineBlock,'Помещений',String(calc.rooms.length));ensure(lineBlock,'Общая площадь',`${num(calc.totalArea)} м²`);ensure(lineBlock,'Общий периметр',`${num(calc.totalPerimeter)} м`);ensure(paragraph,'Документ сформирован из актуального сохранённого замера. Перед раскроем и закупкой сверить контрольные размеры и метраж провода на объекте.');
+  } else {
+    ensure(lineBlock,'Себестоимость',money(calc.cost));ensure(lineBlock,'Цена клиенту',money(calc.clientTotal));ensure(lineBlock,'Прибыль',money(calc.profit),true);ensure(lineBlock,'Маржа',`${num(calc.margin,1)}%`);ensure(lineBlock,'Курс USD/BYN',num(project.pricing?.usdBynRate,4));ensure(lineBlock,'Обновлено',date(project.updatedAt));
+  }
   return pages.map(x=>x.c);
 }
 
