@@ -1,4 +1,5 @@
-GitHub Pages public mirror for Stretch-Ceiling-Calculator v3.
+GitHub Pages public mirror for Stretch-Ceiling-Calculator KONTUR v3 r8.
 Source of truth: remb82-lab/Stretch-Ceiling-Calculator (private canonical repository).
+Canonical release merge: ae219269286b2dec54ff15bc6e1d218b6ea4accb.
 Mirror updated: 2026-09-20.
-Scope: multi-room measurement, polygon geometry, plan elements, photos/notes, PDF documents, local history/statuses, LumFer offline DB 246 products / 377 prices.
+Scope: multi-room measurement, polygon geometry, plan elements, photos/notes, three PDF documents, local history/statuses, whole-stick profile purchasing, 100 mm wall-fastener rule, light/chandelier field kits, LumFer automatic procurement, filtered profile selector, offline cache r8, LumFer offline DB 246 products / 377 prices.
