@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#091315">
+  <title>ПОТОЛКИ · core-v2 preview</title>
+  <link rel="stylesheet" href="preview.css">
+  <script src="../ceiling/data/price-data.js"></script>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div>
+        <span class="tag">ОТДЕЛЬНЫЙ PREVIEW · РАБОЧАЯ ВЕРСИЯ НЕ ЗАМЕНЕНА</span>
+        <h1>ПОТОЛКИ · v3 · core-v2</h1>
+        <p>Полевой контроль расчётного ядра: геометрия → профиль → крепёж → свет → автозакупка → цена клиенту.</p>
+      </div>
+      <div class="build">CORE-V2<br><small id="dbMeta">БД загружается…</small></div>
+    </header>
+
+    <section class="status-card" id="statusCard">
+      <div><span>Статус сметы</span><strong id="statusText">Проверяю…</strong></div>
+      <div id="issues" class="issues"></div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>1. Помещение</h2>
+        <div class="fields two">
+          <label>Длина, м<input id="length" type="number" min="0" step="0.01" value="4"></label>
+          <label>Ширина, м<input id="width" type="number" min="0" step="0.01" value="5"></label>
+          <label>Запас полотна, %<input id="waste" type="number" min="0" step="1" value="8"></label>
+          <label>Курс USD/BYN<input id="usd" type="number" min="0" step="0.0001" value="3.3"></label>
+          <label>Полотно, BYN/м²<input id="membrane" type="number" min="0" step="0.01" value="8"></label>
+          <label>Монтаж, BYN/м²<input id="labor" type="number" min="0" step="0.01" value="12"></label>
+        </div>
+        <div class="metrics">
+          <div><small>Площадь</small><strong id="areaOut">—</strong></div>
+          <div><small>Периметр</small><strong id="perimeterOut">—</strong></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. Профиль и крепёж</h2>
+        <label>Профиль из локального прайса<select id="profile"></select></label>
+        <div class="fields two">
+          <label>Усиление на угол, шт.<input id="cornerExtra" type="number" min="0" step="1" placeholder="обязательно"></label>
+          <label>Усиление на стык, шт.<input id="jointExtra" type="number" min="0" step="1" placeholder="обязательно"></label>
+        </div>
+        <div class="result-list">
+          <div><span>Хлысты</span><strong id="sticksOut">—</strong></div>
+          <div><span>Закупка профиля</span><strong id="profileBuyOut">—</strong></div>
+          <div><span>Базовый крепёж 100 мм</span><strong id="fastenerBaseOut">—</strong></div>
+          <div><span>Крепёж с усилением</span><strong id="fastenerOut">—</strong></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>3. Свет</h2>
+        <div class="fields two">
+          <label>Светильники, шт.<input id="lights" type="number" min="0" step="1" value="4"></label>
+          <label>Диаметр светильника, мм<input id="lightDiameter" type="number" min="20" step="5" value="90"></label>
+          <label>Провод на светильник, м<input id="wirePerLight" type="number" min="0" step="0.1" value="2"></label>
+          <label>Работа/светильник, BYN<input id="lightWork" type="number" min="0" step="0.01" value="10"></label>
+          <label>Люстры, шт.<input id="chandeliers" type="number" min="0" step="1" value="0"></label>
+          <label>Провод на люстру, м<input id="wirePerChandelier" type="number" min="0" step="0.1" value="0"></label>
+          <label>Работа/люстру, BYN<input id="chandelierWork" type="number" min="0" step="0.01" value="10"></label>
+          <label>Электрические линии, шт.<input id="lines" type="number" min="0" step="1" value="1"></label>
+        </div>
+        <div class="result-list">
+          <div><span>Всего точек</span><strong id="pointsOut">—</strong></div>
+          <div><span>Клеммы</span><strong id="wagoOut">—</strong></div>
+          <div><span>Подвесы</span><strong id="suspensionsOut">—</strong></div>
+          <div><span>Провод</span><strong id="wireOut">—</strong></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>4. Дополнительные элементы</h2>
+        <h3>Труба</h3>
+        <div class="fields two">
+          <label>Количество<input id="pipeQty" type="number" min="0" step="1" value="0"></label>
+          <label>Диаметр, мм<input id="pipeDiameter" type="number" min="0" step="1" value="0"></label>
+          <label>Работа/шт., BYN<input id="pipeWork" type="number" min="0" step="0.01" value="0"></label>
+          <label>Материал/шт., BYN<input id="pipeMaterial" type="number" min="0" step="0.01" value="0"></label>
+        </div>
+        <h3>Карниз</h3>
+        <div class="fields two">
+          <label>Длина, м<input id="corniceLength" type="number" min="0" step="0.01" value="0"></label>
+          <label>Повороты, шт.<input id="corniceCorners" type="number" min="0" step="1" value="0"></label>
+          <label>Работа/м, BYN<input id="corniceWork" type="number" min="0" step="0.01" value="0"></label>
+          <label>Материал/м, BYN<input id="corniceMaterial" type="number" min="0" step="0.01" value="0"></label>
+          <label>Поворот/шт., BYN<input id="corniceCornerCost" type="number" min="0" step="0.01" value="0"></label>
+        </div>
+      </section>
+    </div>
+
+    <section class="card procurement-card">
+      <div class="section-head"><div><h2>5. Автозакупка LumFer</h2><p>Пачки крепежа считаются целиком. Провод не придумывается — берётся только введённый метраж.</p></div><strong id="autoTotal">0 BYN</strong></div>
+      <div class="table-wrap"><table><thead><tr><th>Позиция</th><th>Нужно</th><th>Купить</th><th>Остаток</th><th>Сумма</th></tr></thead><tbody id="autoRows"></tbody></table></div>
+    </section>
+
+    <section class="card total-card">
+      <div class="pricing">
+        <label>Способ цены<select id="priceMethod"><option value="percent">Наценка, %</option><option value="fixed">Прибавить, BYN</option><option value="manual">Итог вручную, BYN</option></select></label>
+        <label>Значение<input id="priceValue" type="number" step="0.01" value="30"></label>
+      </div>
+      <div class="totals">
+        <div><span>Себестоимость</span><strong id="costOut">—</strong></div>
+        <div class="accent"><span>Клиенту</span><strong id="clientOut">—</strong></div>
+        <div><span>Прибыль</span><strong id="profitOut">—</strong></div>
+        <div><span>Маржа</span><strong id="marginOut">—</strong></div>
+      </div>
+      <p class="footnote">Контрольный CI ядра отдельно зафиксирован: 4×5 м → себестоимость 707,50 BYN → клиент 1 174,45 BYN при тестовой наценке 66%. Preview использует реальные позиции текущей локальной БД, поэтому итог зависит от выбранного профиля и введённых правил.</p>
+    </section>
+  </main>
+  <script type="module" src="preview.mjs"></script>
+</body>
+</html>
