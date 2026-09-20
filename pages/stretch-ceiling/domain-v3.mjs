@@ -1,3 +1,6 @@
+import {profileStockPlan, wallFastenerPlan, buildElectricalPlan} from './field-rules-v1.mjs';
+import {buildLumferAutoKit} from './lumfer-kit-adapter.mjs';
+
 export const STATUS_ORDER = ['measurement','approval','installation','completed'];
 export const STATUS_LABELS = {
   measurement: 'Замер',
@@ -105,6 +108,33 @@ export function unitPriceByn(product, usdBynRate=0) {
   return p.currency==='USD' ? (+p.amount||0)*(+usdBynRate||0) : (+p.amount||0);
 }
 
+export function profileStickLengthM(product, fallback=2) {
+  const name=String(product?.name||'').replace(',', '.');
+  const match=name.match(/(\d+(?:\.\d+)?)\s*м(?!м)/i);
+  const parsed=match ? Number(match[1]) : 0;
+  return parsed>0 ? parsed : Math.max(0.001,+fallback||2);
+}
+
+export function profilePurchasePlan(product, requiredM, usdBynRate=0) {
+  const dealer=dealerPrice(product);
+  const unit=String(dealer?.unit||product?.default_unit||'').toLowerCase();
+  const stickLengthM=profileStickLengthM(product,2);
+  const stock=profileStockPlan(requiredM,stickLengthM);
+  const dealerUnitPriceByn=unitPriceByn(product,usdBynRate);
+  const byPiece=unit.includes('шт');
+  const chargeQty=byPiece ? stock.pieces : stock.purchaseM;
+  const pricingBasis=byPiece ? 'stick' : 'meter';
+  const cost=chargeQty*dealerUnitPriceByn;
+  return {
+    ...stock,
+    pricingBasis,
+    chargeQty,
+    dealerUnit: dealer?.unit||product?.default_unit||'',
+    dealerUnitPriceByn,
+    cost,
+  };
+}
+
 export function featureCost(f) {
   const unit=Math.max(0,+f.unitCost||0);
   if (f.type==='track' || f.type==='cornice') return Math.max(0,+f.length||0)*unit;
@@ -118,8 +148,12 @@ export function calculateRoom(room, db={products:[]}, settings={usdBynRate:0}) {
   const membraneCost=membraneQty*Math.max(0,+room.pricing?.membraneCostPerM2||0);
   const laborCost=geom.area*Math.max(0,+room.pricing?.laborCostPerM2||0);
   const profile=db.products?.find(p=>p.id===Number(room.pricing?.profileProductId));
-  const profileQty=geom.perimeter*factor;
-  const profileCost=profileQty*unitPriceByn(profile,settings.usdBynRate);
+  const profileStock=profilePurchasePlan(profile,geom.perimeter,settings.usdBynRate);
+  const profileQty=profileStock.purchaseM;
+  const profileCost=profileStock.cost;
+  const fasteners=wallFastenerPlan(geom.perimeter);
+  const electrical=buildElectricalPlan(room.features||[]);
+  const autoKit=buildLumferAutoKit({room,electrical,fasteners,db,usdBynRate:settings.usdBynRate});
   const materials=(room.materials||[]).map(line=>{
     const product=db.products?.find(p=>p.id===Number(line.productId));
     const qty=Math.max(0,+line.qty||0), unit=unitPriceByn(product,settings.usdBynRate);
@@ -128,8 +162,9 @@ export function calculateRoom(room, db={products:[]}, settings={usdBynRate:0}) {
   const materialsCost=materials.reduce((s,x)=>s+x.total,0);
   const features=(room.features||[]).map(x=>({...x,total:featureCost(x)}));
   const featuresCost=features.reduce((s,x)=>s+x.total,0);
-  const cost=membraneCost+laborCost+profileCost+materialsCost+featuresCost;
-  return {room,geom,factor,membraneQty,membraneCost,laborCost,profile,profileQty,profileCost,materials,materialsCost,features,featuresCost,cost};
+  const autoMaterialsCost=autoKit.total;
+  const cost=membraneCost+laborCost+profileCost+materialsCost+featuresCost+autoMaterialsCost;
+  return {room,geom,factor,membraneQty,membraneCost,laborCost,profile,profileQty,profileStock,profileCost,fasteners,electrical,autoKit,autoMaterialsCost,materials,materialsCost,features,featuresCost,cost};
 }
 
 export function calculateProject(project, db={products:[]}) {
