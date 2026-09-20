@@ -1,2 +1,4 @@
-Temporary GitHub Pages mirror for Stretch-Ceiling-Calculator.
-Source: remb82-lab/Stretch-Ceiling-Calculator
+GitHub Pages public mirror for Stretch-Ceiling-Calculator v3.
+Source of truth: remb82-lab/Stretch-Ceiling-Calculator (private canonical repository).
+Mirror updated: 2026-09-20.
+Scope: multi-room measurement, polygon geometry, plan elements, photos/notes, PDF documents, local history/statuses, LumFer offline DB 246 products / 377 prices.
