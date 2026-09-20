@@ -84,7 +84,7 @@ const emptyProject=createProject();
 emptyProject.rooms=[emptyRoom];
 emptyProject.pricing={usdBynRate:3.1,method:'percent',value:66};
 const emptyCalc=calculateProject(emptyProject,db).rooms[0];
-assert.equal(emptyCalc.profile,null);
+assert.equal(emptyCalc.profile == null,true);
 assert.equal(emptyCalc.fasteners.qty,0);
 assert.equal(emptyCalc.autoKit.lines.some(x=>x.productId===50||x.productId===53),false);
 assert.equal(emptyCalc.validation.blockingIssues.some(x=>x.code==='FASTENER_REINFORCEMENT_UNSET'),false);
