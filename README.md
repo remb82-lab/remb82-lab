@@ -8,6 +8,8 @@
 
 </div>
 
+> **Codex / AI agents:** start with [`CODEX_BOOTSTRAP.md`](./CODEX_BOOTSTRAP.md).
+
 ---
 
 ## 🚀 Что я создаю
